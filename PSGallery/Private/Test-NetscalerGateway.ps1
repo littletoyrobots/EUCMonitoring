@@ -9,12 +9,13 @@ function Test-NetScalerGateway {
         [parameter(Mandatory = $true, ValueFromPipeline = $true)]$NetScalerHostingGateway,
         [parameter(Mandatory = $true, ValueFromPipeline = $true)]$NetScalerUserName,
         [parameter(Mandatory = $true, ValueFromPipeline = $true)][System.Security.SecureString]$NetscalerPassword
-
     )
 
     #Create array with results
     $gwresults = @()
     $errors = @()
+
+    # Connect to Netscaler. 
 
     # Test the NetScaler Gateway
     $ICAUsers = (((Get-AAAUser $NetScalerHostingGateway $NetScalerUserName $NetScalerPassword "ica").vpnicaconnection) | Measure-Object).count
@@ -50,5 +51,9 @@ function Test-NetScalerGateway {
             'TotalGatewayUsers' = $TotalUsers
         }
     }
+
+    # Disconnect from Netscaler.
+
+    
     return $gwresults
 }

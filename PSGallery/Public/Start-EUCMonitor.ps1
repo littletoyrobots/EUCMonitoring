@@ -77,6 +77,7 @@ function Start-EUCMonitor {
     If ((Test-Path $InfraErrorFile) -eq $true) { Remove-Item $InfraErrorFile -Force }
     If ((Test-Path $WorkerErrorFile) -eq $true) { Remove-Item $WorkerErrorFile -Force }
 
+    
     foreach ( $SeriesName in $ConfigObject.PSObject.Properties.Name ) {
 
         # So, this works by iterating over the top elements of the config file and processing them.

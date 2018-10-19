@@ -109,6 +109,7 @@ function Test-XdWorker {
         $BMMaintenanceCount = ($BrokerMachines | Where-Object {($_.InMaintenanceMode -match "True" -and $_.PowerState -notmatch "Off")} | Measure-Object).Count
         $BMOffCount = ($BrokerMachines | Where-Object {($_.PowerState -match "Off")} | Measure-Object).Count
         $BMOnCount = ($BrokerMachines | Where-Object {($_.PowerState -match "On")} | Measure-Object).Count
+        $BMOtherCount = ($BrokerMachines | Where-Object {($_.PowerState -notmatch "On") -and ($_.PowerState -notmatch "Off")} | Measure-Object).Count
         $BMRegisteredCount = ($BrokerMachines | Where-Object {($_.RegistrationState -eq "Registered" -and $_.PowerState -notmatch "Off")} | Measure-Object).Count
         $BMUnRegisteredCount = ($BrokerMachines | Where-Object {($_.RegistrationState -eq "Unregistered" -and $_.PowerState -notmatch "Off")} | Measure-Object).Count
 
@@ -137,6 +138,7 @@ function Test-XdWorker {
                 'DeliveryGroupsInMaintenance'    = $DGMaintenanceCount
                 'BrokerMachineOn'                = $BMOnCount
                 'BrokerMachineOff'               = $BMOffCount
+                'BrokerMachineOther'             = $BMOtherCount
                 'BrokerMachineRegistered'        = $BMRegisteredCount
                 'BrokerMachineUnRegistered'      = $BMUnRegisteredCount
                 'BrokerMachineInMaintenance'     = $BMMaintenanceCount

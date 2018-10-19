@@ -76,9 +76,13 @@ function Test-NetScaler {
                     $Errors += "$vServerName is Down"
                 }
                 $Results += [PSCustomObject]@{
-                    'vServerName'   = $vServerName
-                    'vServerHealth' = [int]$vServer.vslbhealth
-                    'Errors'        = $Errors
+                    'vServerName'          = $vServerName
+                    'vServerHealth'        = [int]$vServer.vslbhealth
+                    'TotalRequests'        = [int]$vServer.TotalRequests
+                    'TotalResponses'       = [int]$vServer.TotalResponses
+                    'CurClientConnections' = [int]$vServer.curclntconnections
+                    'CurServerConnections' = [int]$vServer.cursrvrconnections
+                    'Errors'               = $Errors
                 }
             }
         }

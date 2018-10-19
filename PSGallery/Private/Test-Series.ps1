@@ -71,9 +71,9 @@ function Test-Series {
             return $null
         }
 
-        $XdControllers = @()
-        $RdsControllers = @()
-
+        $XdControllers = @()  # XenApp / XenDesktop Controllers
+        $RdsControllers = @() # Remote Desktop Services Controllers
+        $VhvControllers = @() # VMWare Horizon View Controllers 
         # Make sure we're allowed to test this series.
         if ( $false -eq $Config.Test) { return $null }
 
@@ -148,6 +148,34 @@ function Test-Series {
                     else {
                         Write-Verbose "Could not connect to any controllers in $RDSSite"
                         $Errors += "Could not connect to any controllers in $RDSSite."
+                    }
+                }
+            }
+
+            if ( $Config.VhvSites ) {
+                foreach ( $VhvSite in $Config.VhvSites ) {
+                    # Test Connection, add the first controller that responds to Servers
+                    # as well as XdControllers
+                    $Controller = ""
+                    if ( $null -eq $Config.Servers ) {
+                        $Config | Add-Member -NotePropertyName Servers -NotePropertyValue @()
+                    }
+
+                    if ( (Connect-Server $VhvSite.PrimaryController ) -eq "Successful" ) {
+                        $Controller = $VhvSite.PrimaryController
+                        $Config.Servers += $Controller
+                        $VhvControllers += $Controller
+                        Write-Verbose "Adding VHV Controller $Controller"
+                    }
+                    elseif ( (Connect-Server $VhvSite.SecondaryController) -eq "Successful") {
+                        $Controller = $VhvSite.SecondaryController
+                        $Config.Servers += $Controller
+                        $VhvControllers += $Controller
+                        Write-Verbose "Adding VHV Controller $Controller"
+                    }
+                    else {
+                        Write-Verbose "Could not connect to any controllers in $VhvSite"
+                        $Errors += "Could not connect to any controllers in $VhvSite."
                     }
                 }
             }
